@@ -23,6 +23,9 @@ public class RPG extends Canvas implements Runnable {
     
     private static final String TITLE = "Juego de rol";
     
+    private static int ups = 0;
+    private static int fps = 0;
+    
     // with the word volatile this variable cannot be used at the same time by the two threads
     private volatile static boolean running = false; 
     
@@ -65,11 +68,49 @@ public class RPG extends Canvas implements Runnable {
         }
     }
     
+    private void update() {
+        ups++;
+    }
+    
+    
+    private void draw() {
+        fps++;
+    }
+    
+    // this will be called every time a new thread is started
     @Override
     public void run() {
-        // this will be called every time a new thread is started
+        final int NS_PER_SECOND = 1000000000;
+        final byte UPS_OBJETIVE = 60; //update per seconds objetive
+        final double NS_PER_UPDATE = NS_PER_SECOND / UPS_OBJETIVE; //How many nanoseconds does it take for a update
+        
+        long updateReference = System.nanoTime();
+        long countReference = System.nanoTime();
+        
+        double timeElapsed;
+        double delta = 0;
+        
         while(running) {
+            final long bucleStart = System.nanoTime();
             
+            timeElapsed = bucleStart - updateReference;
+            updateReference = bucleStart;
+            
+            delta += timeElapsed / NS_PER_UPDATE;
+        
+            while(delta >= 1) {
+                update();
+                delta--;
+            }
+            
+            draw();
+            
+            if (System.nanoTime() - countReference > NS_PER_SECOND) {
+                window.setTitle(TITLE + " || UPS: " + ups + " || FPS: " + fps);
+                ups = 0;
+                fps = 0;
+                countReference = System.nanoTime();
+            }
         }
     }
     
