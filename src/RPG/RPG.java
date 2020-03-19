@@ -8,6 +8,8 @@ package RPG;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -20,6 +22,9 @@ public class RPG extends Canvas implements Runnable {
     private static final int HIGHT = 600;
     
     private static final String TITLE = "Juego de rol";
+    
+    // with the word volatile this variable cannot be used at the same time by the two threads
+    private volatile static boolean running = false; 
     
     private static JFrame window;
     private static Thread thread;
@@ -42,18 +47,30 @@ public class RPG extends Canvas implements Runnable {
         app.start();
     }
 
-    private void start() {
-        this.thread = new Thread(this, "Graphics");
+    // with synchronized the two methods won't be able to execute at the same time
+    private synchronized void start() {
+        running = true;
+        
+        thread = new Thread(this, "Graphics");
         thread.start();
     }
     
-    private void stop() {
+    private synchronized void stop() {
+        running = false;
         
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     
     @Override
     public void run() {
         // this will be called every time a new thread is started
+        while(running) {
+            
+        }
     }
     
 }
