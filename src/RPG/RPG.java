@@ -5,6 +5,7 @@
  */
 package RPG;
 
+import control.Keyboard;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
@@ -31,10 +32,14 @@ public class RPG extends Canvas implements Runnable {
     
     private static JFrame window;
     private static Thread thread;
+    private Keyboard keyboard;
     
     private RPG() {
         setPreferredSize(new Dimension(WIDE, HIGHT));
 
+        keyboard = new Keyboard();
+        addKeyListener(keyboard);
+        
         window = new JFrame(TITLE);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE );
         window.setResizable(false);
@@ -43,6 +48,8 @@ public class RPG extends Canvas implements Runnable {
         window.pack(); //the items inside the window will fullfill it
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+        
+        requestFocus();
     }
     
     public static void main(String[] args) {
@@ -69,6 +76,21 @@ public class RPG extends Canvas implements Runnable {
     }
     
     private void update() {
+        keyboard.update();
+        
+        if (keyboard.up) {
+            System.out.println("up");
+        }
+        if (keyboard.down) {
+            System.out.println("down");
+        }
+        if (keyboard.left) {
+            System.out.println("left");
+        }
+        if (keyboard.rigth) {
+            System.out.println("rigth");
+        }
+        
         ups++;
     }
     
