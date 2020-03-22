@@ -10,6 +10,11 @@ public final class Sprite {
     public int[] pixels;
     private final SpritesSheet sheet;
     
+    // Sprites collection
+        public static Sprite asphalt = new Sprite(32, 0, 0, SpritesSheet.desert);
+    
+    // collection end
+
     public Sprite(final int size, final int col, final int row, final SpritesSheet sheet) {
         this.size = size;
         

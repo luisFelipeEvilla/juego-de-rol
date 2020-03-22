@@ -6,9 +6,14 @@
 package RPG;
 
 import control.Keyboard;
+import graphics.Screen;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -19,24 +24,33 @@ import javax.swing.JFrame;
  */
 public class RPG extends Canvas implements Runnable {
         
-    private static final int WIDE = 800;
-    private static final int HIGHT = 600;
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 600;
     
     private static final String TITLE = "Juego de rol";
     
     private static int ups = 0;
     private static int fps = 0;
     
+    private static int x = 0;
+    private static int y = 0;
+    
     // with the word volatile this variable cannot be used at the same time by the two threads
     private volatile static boolean running = false; 
     
     private static JFrame window;
     private static Thread thread;
-    private Keyboard keyboard;
+    private static Keyboard keyboard;
+    private static Screen screen;
+    
+    private static BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+    private static int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
     
     private RPG() {
-        setPreferredSize(new Dimension(WIDE, HIGHT));
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
+        screen = new Screen(WIDTH, HEIGHT);
+        
         keyboard = new Keyboard();
         addKeyListener(keyboard);
         
@@ -79,16 +93,16 @@ public class RPG extends Canvas implements Runnable {
         keyboard.update();
         
         if (keyboard.up) {
-            System.out.println("up");
+            y++;
         }
         if (keyboard.down) {
-            System.out.println("down");
+            y--;
         }
         if (keyboard.left) {
-            System.out.println("left");
+            x--;
         }
         if (keyboard.rigth) {
-            System.out.println("rigth");
+            x++;
         }
         
         ups++;
@@ -96,6 +110,24 @@ public class RPG extends Canvas implements Runnable {
     
     
     private void draw() {
+        BufferStrategy strategy = getBufferStrategy();
+        
+        if (strategy == null) {
+            createBufferStrategy(3);
+            return;
+        }
+        
+        System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);
+        
+        screen.clean();
+        screen.draw(x, y);
+         
+        Graphics g = strategy.getDrawGraphics();
+        g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+        g.dispose();
+        
+        strategy.show();
+        
         fps++;
     }
     
