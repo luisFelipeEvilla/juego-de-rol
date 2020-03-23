@@ -33,6 +33,9 @@ public class RPG extends Canvas implements Runnable {
 
     private static final String TITLE = "Juego de rol";
     
+    private static String upsCounter = "";
+    private static String fpsCounter = "";
+    
     private static int ups = 0;
     private static int fps = 0;
     
@@ -69,6 +72,7 @@ public class RPG extends Canvas implements Runnable {
         window.setIconImage(icon.getImage()); // window icon
         window.setLayout(new BorderLayout());
         window.add(this, BorderLayout.CENTER); // add canvas to the window and center it
+        window.setUndecorated(true);
         window.pack(); //the items inside the window will fullfill it
         window.setLocationRelativeTo(null);
         window.setVisible(true);
@@ -114,6 +118,9 @@ public class RPG extends Canvas implements Runnable {
         if (keyboard.rigth) {
             x++;
         }
+        if (keyboard.scape) {
+           System.exit(0);
+        }
         
         ups++;
     }
@@ -136,6 +143,8 @@ public class RPG extends Canvas implements Runnable {
         g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
         g.setColor(Color.white);
         g.fillRect(WIDTH/2 - 16, HEIGHT/2 -16, 32, 32);
+        g.drawString(upsCounter, 10, 20);
+        g.drawString(fpsCounter, 10, 35);
         g.dispose();
         
         strategy.show();
@@ -172,7 +181,9 @@ public class RPG extends Canvas implements Runnable {
             draw();
             
             if (System.nanoTime() - countReference > NS_PER_SECOND) {
-                window.setTitle(TITLE + " || UPS: " + ups + " || FPS: " + fps);
+                upsCounter = "UPS: " + ups;
+                fpsCounter = "FPS: " + fps;
+                
                 ups = 0;
                 fps = 0;
                 countReference = System.nanoTime();

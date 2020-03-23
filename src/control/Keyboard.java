@@ -14,6 +14,8 @@ public final class Keyboard implements KeyListener {
     public boolean left;
     public boolean rigth;
     
+    public boolean scape;
+    
     public void update() {
         up = keys[KeyEvent.VK_W];
         down = keys[KeyEvent.VK_S];
@@ -27,6 +29,8 @@ public final class Keyboard implements KeyListener {
         left = keys[KeyEvent.VK_LEFT];
         rigth = keys[KeyEvent.VK_RIGTH]; 
         */
+        
+        scape = keys[KeyEvent.VK_ESCAPE];
     }
     
     @Override
