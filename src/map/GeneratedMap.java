@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class GeneratedMap extends Map {
     
-    private final Random random = new Random();
+    private static final Random random = new Random();
     
     public GeneratedMap(int width, int heigth) {
         super(width, heigth);

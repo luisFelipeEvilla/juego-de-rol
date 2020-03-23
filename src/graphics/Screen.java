@@ -7,6 +7,9 @@ public class Screen {
     private final int width;
     private final int height;
 
+    private int differenceX;
+    private int differenceY;
+    
     public final int[] pixels;
 
     // temporal
@@ -49,16 +52,28 @@ public class Screen {
     }
 
     public void drawTile(int compensationX, int compensationY, Tile tile) {
+        compensationX -= differenceX;
+        compensationY -= differenceY;
+        
         for (int y = 0; y < tile.sprite.getSize(); y++) {
             int positionY = y + compensationY;
             for (int x = 0; x < tile.sprite.getSize(); x++) {
                 int positionX = x + compensationX;
-                  if (positionX <  0 || positionX > width || positionY < 0 || positionY > height ) {
+                  if (positionX < -tile.sprite.getSize() || positionX >= width || positionY < 0 || positionY >= height ) {
                       break;
                   } 
+                  
+                  if (positionX < 0) {
+                      positionX = 0;
+                  }
                   pixels[positionX + positionY * width] = tile.sprite.pixels[x + y * tile.sprite.getSize()];
             }
         }
+    }
+    
+    public void setDifference(final int differenceX, final int differenceY) {
+        this.differenceX = differenceX;
+        this.differenceY = differenceY;
     }
 
     public int getWidth() {

@@ -9,6 +9,7 @@ import control.Keyboard;
 import graphics.Screen;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
@@ -18,6 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import map.GeneratedMap;
+import map.Map;
 
 /**
  *
@@ -35,7 +38,7 @@ public class RPG extends Canvas implements Runnable {
     
     private static int x = 0;
     private static int y = 0;
-    
+        
     // with the word volatile this variable cannot be used at the same time by the two threads
     private volatile static boolean running = false; 
     
@@ -43,6 +46,8 @@ public class RPG extends Canvas implements Runnable {
     private static Thread thread;
     private static Keyboard keyboard;
     private static Screen screen;
+    
+    private static Map map;
     
     private static BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     private static int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
@@ -52,6 +57,8 @@ public class RPG extends Canvas implements Runnable {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
         screen = new Screen(WIDTH, HEIGHT);
+        
+        map = new GeneratedMap(128, 128);
         
         keyboard = new Keyboard();
         addKeyListener(keyboard);
@@ -96,10 +103,10 @@ public class RPG extends Canvas implements Runnable {
         keyboard.update();
         
         if (keyboard.up) {
-            y++;
+            y--;
         }
         if (keyboard.down) {
-            y--;
+            y++;
         }
         if (keyboard.left) {
             x--;
@@ -123,10 +130,12 @@ public class RPG extends Canvas implements Runnable {
         System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);
         
         screen.clean();
-        screen.draw(x, y);
-         
+        map.draw(x, y, screen);
+        
         Graphics g = strategy.getDrawGraphics();
         g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+        g.setColor(Color.white);
+        g.fillRect(WIDTH/2 - 16, HEIGHT/2 -16, 32, 32);
         g.dispose();
         
         strategy.show();

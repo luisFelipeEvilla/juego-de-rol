@@ -7,6 +7,8 @@ public class Tile {
     public int width;
     public int heigth;
     
+    public static final int SIZE = 32;
+    
     public Sprite sprite;
     
     // Tiles collection
@@ -19,6 +21,7 @@ public class Tile {
     }
     
     public void draw(int x, int y, Screen screen) { 
+        screen.drawTile(x << 5, y << 5, this);
     }
     
     public boolean solid() {

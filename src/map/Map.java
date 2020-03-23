@@ -36,20 +36,35 @@ public abstract class Map {
     }
     
     public void draw(final int compensationX, final int compensationY, final Screen screen) {
+
+        screen.setDifference(compensationX, compensationY);
+        
         // north, sourth, west, east
         int n = compensationY >> 5; // "/32" bit shifting
-        int s = (compensationY + screen.getHeight());
+        int s = (compensationY + screen.getHeight() + Tile.SIZE) >> 5;
         int w = compensationX >> 5; // "/32" bit shifting
-        int e = (compensationX + screen.getWidth())/32;
+        int e = (compensationX + screen.getWidth() + Tile.SIZE) >> 5;
+    
+        for (int y = n; y < s; y++) {
+            for (int x = w; x < e; x++) {
+                getTile(x, y).draw(x, y, screen);
+            }
+        }
     }
     
     public Tile getTile(final int x, final int y) {
-        
+        if (x < 0 || x >= width || y < 0 || y >= heigth) {
+            return Tile.VOID;
+        }
         switch (tiles[x + y * width]) {
             case 0:
                 return Tile.ASPHALT;
+            case 1:
+            case 2:
+            case 3:
+                
             default:
-                return null;
+                return Tile.VOID;
         }
     }
 }
