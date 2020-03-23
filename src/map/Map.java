@@ -1,12 +1,13 @@
 package map;
 
 import graphics.Screen;
+import map.tile.Tile;
 
 public abstract class Map {
-    private int width;
-    private int heigth;
+    protected int width;
+    protected int heigth;
     
-    private int[] tiles;
+    protected int[] tiles;
 
     public Map(int width, int heigth) {
         this.width = width;
@@ -21,7 +22,7 @@ public abstract class Map {
     }
     
     // generate a random map
-    private void generateMap() {
+    protected void generateMap() {
         
     }
     
@@ -34,7 +35,21 @@ public abstract class Map {
         
     }
     
-    public void draw(int compensationX, int compensationY, Screen screen) {
+    public void draw(final int compensationX, final int compensationY, final Screen screen) {
+        // north, sourth, west, east
+        int n = compensationY >> 5; // "/32" bit shifting
+        int s = (compensationY + screen.getHeight());
+        int w = compensationX >> 5; // "/32" bit shifting
+        int e = (compensationX + screen.getWidth())/32;
+    }
+    
+    public Tile getTile(final int x, final int y) {
         
+        switch (tiles[x + y * width]) {
+            case 0:
+                return Tile.ASPHALT;
+            default:
+                return null;
+        }
     }
 }

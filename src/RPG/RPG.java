@@ -25,9 +25,9 @@ import javax.swing.JFrame;
  */
 public class RPG extends Canvas implements Runnable {
         
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 600;
-    
+    private static final int WIDTH = 400;
+    private static final int HEIGHT = 300;
+
     private static final String TITLE = "Juego de rol";
     
     private static int ups = 0;
@@ -46,7 +46,7 @@ public class RPG extends Canvas implements Runnable {
     
     private static BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
     private static int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
-    private static final ImageIcon icon = new ImageIcon(RPG.class.getResource("/icon/icon.png"));
+    private static final ImageIcon icon = new ImageIcon(RPG.class.getResource("/icon/icon.png")); //icon image
     
     private RPG() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -59,7 +59,7 @@ public class RPG extends Canvas implements Runnable {
         window = new JFrame(TITLE);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE );
         window.setResizable(false);
-        window.setIconImage(icon.getImage());
+        window.setIconImage(icon.getImage()); // window icon
         window.setLayout(new BorderLayout());
         window.add(this, BorderLayout.CENTER); // add canvas to the window and center it
         window.pack(); //the items inside the window will fullfill it
@@ -171,4 +171,11 @@ public class RPG extends Canvas implements Runnable {
         }
     }
     
+    public static int getWIDTH() {
+        return WIDTH;
+    }
+
+    public static int getHEIGHT() {
+        return HEIGHT;
+    }
 }

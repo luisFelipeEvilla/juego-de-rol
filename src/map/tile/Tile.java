@@ -9,12 +9,16 @@ public class Tile {
     
     public Sprite sprite;
     
+    // Tiles collection
+    public static final Tile VOID = new VoidTile(Sprite.VOID);
+    public static final Tile ASPHALT = new AsphaltTile(Sprite.ASPHALT);
+    // end of collection
+    
     public Tile(Sprite sprite) {
         this.sprite = sprite;
     }
     
-    public void draw(int x, int y, Screen screen) {
-        
+    public void draw(int x, int y, Screen screen) { 
     }
     
     public boolean solid() {
